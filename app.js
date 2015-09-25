@@ -4,7 +4,19 @@ $(document).ready( function() {
 		$('.results').html('');
 		// get the value of the tags the user submitted
 		var tags = $(this).find("input[name='tags']").val();
+		//call the function & pass it the search tags as parameters
 		getUnanswered(tags);
+	});
+
+	$('.inspiration-getter').submit(function(event){
+		//zero out results if previous search has run
+		$('.results').html('');
+		//get the value of the tags the user submitted
+		var searchTerm = $(this).find('input[name="answerers"]').val();
+		//console log the user entered search tags just to be sure of input capture
+		console.log(searchTerm);
+		//call the function and pass it the search tags
+		getTopAnswerers(searchTerm);
 	});
 });
 
@@ -43,10 +55,31 @@ var showQuestion = function(question) {
 
 
 // this function takes the results object from StackOverflow
-// and creates info about search results to be appended to DOM
+// and creates info about search results to be appended to the DOM
 var showSearchResults = function(query, resultNum) {
 	var results = resultNum + ' results for <strong>' + query;
 	return results;
+};
+
+var showAnsResults = function(searchTerm) {
+	return 'Top answerers for ' + searchTerm;
+};
+
+var showUser = function (userScore) {
+  var result = $('.templates .user-score').clone();
+  result.find('.user-avatar')
+    .attr('src', userScore.user.profile_image)
+    .after(userScore.user.display_name)
+    .parent()
+      .attr('href', userScore.user.link);
+  result.find('.reputation')
+      .text(userScore.user.reputation);
+  result.find('.post-count')
+      .text(userScore.post_count);
+  result.find('.accept-rate')
+      .text(userScore.user.accept_rate);
+
+  return result;
 };
 
 // takes error string and turns it into displayable DOM element
@@ -73,8 +106,10 @@ var getUnanswered = function(tags) {
 		type: "GET",
 		})
 	.done(function(result){
+		/*declare var to hold the info from the showSearchResults function
+		for readability*/
 		var searchResults = showSearchResults(request.tagged, result.items.length);
-
+		//show that info in the search-results DIV
 		$('.search-results').html(searchResults);
 
 		$.each(result.items, function(i, item) {
@@ -85,6 +120,36 @@ var getUnanswered = function(tags) {
 	.fail(function(jqXHR, error, errorThrown){
 		var errorElem = showError(error);
 		$('.search-results').append(errorElem);
+	});
+};
+
+//this function finds the top answerers for the tag input by user
+var getTopAnswerers = function(searchTerm) {
+	//append searchTerm var to the url
+	var url = 'http://api.stackexchange.com/2.2/tags/' + searchTerm + '/top-answerers/all_time'	
+	//parameters required to be passed to the StackOverflow API
+    var ajax = { url: url,
+    			 data: {site: 'stackoverflow'},
+    			 dataType: 'jsonp',
+    			 type: 'GET'};
+
+    console.log(searchTerm);
+    console.log(url);
+
+    $.ajax(ajax)
+		.done(function(result){
+		var ansResults = showAnsResults(searchTerm);
+
+		$('.inspiration-results').html(ansResults);
+		//append each result to the DOM
+		$.each(result.items, function(i, item) {
+			var user = showUser(item);
+			$('.inspiration-results').append(user);
+		});
+	})
+	.fail(function(jqXHR, error, errorThrown){
+		var errorElem = showError(error);
+		$('.inspiration-results').append(errorElem);
 	});
 };
 
