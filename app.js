@@ -11,11 +11,11 @@ $(document).ready( function() {
 
 	$('.inspiration-getter').submit(function(event){
 		//zero out results if previous search has run
-<<<<<<< HEAD
 
-=======
+
+
 		$('.search-results').html('');
->>>>>>> master
+
 		$('.inspiration-results').html('');
 
 		$('.results').html('');
