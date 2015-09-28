@@ -1,7 +1,7 @@
 $(document).ready( function() {
 	$('.unanswered-getter').submit( function(event){
 		// zero out results if previous search has run
-		$('.results').html('');
+		$('.search-results').html('');
 		// get the value of the tags the user submitted
 		var tags = $(this).find("input[name='tags']").val();
 		//call the function & pass it the search tags as parameters
@@ -10,7 +10,7 @@ $(document).ready( function() {
 
 	$('.inspiration-getter').submit(function(event){
 		//zero out results if previous search has run
-		$('.results').html('');
+		$('.inspiration-results').html('');
 		//get the value of the tags the user submitted
 		var searchTerm = $(this).find('input[name="answerers"]').val();
 		//console log the user entered search tags just to be sure of input capture
@@ -114,7 +114,7 @@ var getUnanswered = function(tags) {
 
 		$.each(result.items, function(i, item) {
 			var question = showQuestion(item);
-			$('.results').append(question);
+			$('.search-results').append(question);
 		});
 	})
 	.fail(function(jqXHR, error, errorThrown){
