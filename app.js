@@ -10,7 +10,11 @@ $(document).ready( function() {
 
 	$('.inspiration-getter').submit(function(event){
 		//zero out results if previous search has run
+<<<<<<< HEAD
 		$('.inspiration-results').html('');
+=======
+		$('.results').html('');
+>>>>>>> gh-pages
 		//get the value of the tags the user submitted
 		var searchTerm = $(this).find('input[name="answerers"]').val();
 		//console log the user entered search tags just to be sure of input capture
