@@ -2,6 +2,7 @@ $(document).ready( function() {
 	$('.unanswered-getter').submit( function(event){
 		// zero out results if previous search has run
 		$('.search-results').html('');
+		$('.inspiration-results').html('');
 		// get the value of the tags the user submitted
 		var tags = $(this).find("input[name='tags']").val();
 		//call the function & pass it the search tags as parameters
@@ -10,7 +11,7 @@ $(document).ready( function() {
 
 	$('.inspiration-getter').submit(function(event){
 		//zero out results if previous search has run
-
+		$('.search-results').html('');
 		$('.inspiration-results').html('');
 
 		$('.results').html('');
